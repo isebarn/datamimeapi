@@ -58,6 +58,10 @@ class Operations:
       session.add(PhraseTranslations(data))
       session.commit()
 
+    else:
+      session.query(
+        PhraseTranslations.Id).filter_by(Phrase=data['Phrase']).update(data)
+
   def QueryPhraseTranslations():
     return [x.json() for x in session.query(PhraseTranslations).all()]
 
@@ -65,6 +69,9 @@ class Operations:
     if session.query(WordTranslations.Id).filter_by(Word=data['Word']).scalar() == None:
       session.add(WordTranslations(data))
       session.commit()
+    else:
+      session.query(
+        WordTranslations.Id).filter_by(Word=data['Word']).update(data)
 
   def QueryWordTranslations():
     return [x.json() for x in session.query(WordTranslations).all()]
@@ -75,5 +82,4 @@ Session.configure(bind=engine)
 session = Session()
 
 if __name__ == "__main__":
-  from pprint import pprint
-  pprint(Operations.QueryWordTranslations())
+  pass
