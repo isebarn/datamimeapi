@@ -85,3 +85,33 @@ class SuccessNamespace(Namespace):
 
     result = self.filters(name, items)
     return self.model("FILTER_" + name, result)
+
+  def phrase_base_filters(self, items):
+    if "property_match" not in items:
+      items['property_match'] = []
+
+    items['property_match'].append({"name": "persona_id", "type": ObjectIdString})
+
+  def phrase_filters(self, name, items={}, base_filters=True):
+    result = {}
+
+    if base_filters:
+      self.phrase_base_filters(items)
+
+    result = self.filters(name, items)
+    return self.model("FILTER_" + name, result)
+
+  def word_base_filters(self, items):
+    if "property_match" not in items:
+      items['property_match'] = []
+
+    items['property_match'].append({"name": "persona_id", "type": ObjectIdString})
+
+  def word_filters(self, name, items={}, base_filters=True):
+    result = {}
+
+    if base_filters:
+      self.word_base_filters(items)
+
+    result = self.filters(name, items)
+    return self.model("FILTER_" + name, result)
