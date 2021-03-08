@@ -22,6 +22,21 @@ def json_child_object(data, name):
   if name in data:
     data[name] = data[name].json()
 
+class Translations(Base):
+  __tablename__ = 'translations'
+
+  Id = Column('id', Integer, primary_key=True)
+  Phrase = Column('phrase', String)
+  Translation = Column('translation', String)
+
+  def __init__(self, data):
+    self.Phrase = data['Phrase']
+    self.Translation = data['Translation']
+
+  def json(self):
+    data = json_object(self)
+    return data
+
 class PhraseTranslations(Base):
   __tablename__ = 'phrase_translations'
 
@@ -53,6 +68,10 @@ class WordTranslations(Base):
     return data
 
 class Operations:
+  def SaveTranslations(data):
+    session.add(Translations(data))
+    session.commit()
+
   def SavePhraseTranslations(data):
     if session.query(PhraseTranslations.Id).filter_by(Phrase=data['Phrase']).scalar() == None:
       session.add(PhraseTranslations(data))
@@ -61,6 +80,9 @@ class Operations:
     else:
       session.query(
         PhraseTranslations.Id).filter_by(Phrase=data['Phrase']).update(data)
+
+    session.add(Translations(data))
+    session.commit()
 
   def QueryPhraseTranslations():
     return [x.json() for x in session.query(PhraseTranslations).all()]
@@ -73,6 +95,7 @@ class Operations:
       session.query(
         WordTranslations.Id).filter_by(Word=data['Word']).update(data)
 
+
   def QueryWordTranslations():
     return [x.json() for x in session.query(WordTranslations).all()]
 
@@ -82,4 +105,4 @@ Session.configure(bind=engine)
 session = Session()
 
 if __name__ == "__main__":
-  pass
+  Operations.SaveTranslations({"Phrase": "Fuck whore", "Translation": "reið hóru"})

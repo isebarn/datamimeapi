@@ -1,5 +1,5 @@
 from utils import Operations
-
+from time import sleep
 def get_list(aggregate, filters):
   return Operations.QueryWordTranslations()
 
