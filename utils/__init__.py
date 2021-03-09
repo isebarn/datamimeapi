@@ -101,6 +101,9 @@ class Operations:
 
 
   def QueryWordTranslations():
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
     return [x.json() for x in session.query(WordTranslations).all()]
 
 Base.metadata.create_all(engine)
