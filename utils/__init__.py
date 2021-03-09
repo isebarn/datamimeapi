@@ -73,15 +73,7 @@ class Operations:
     session.commit()
 
   def SavePhraseTranslations(data):
-    if session.query(PhraseTranslations.Id).filter_by(Phrase=data['Phrase']).scalar() == None:
-      session.add(PhraseTranslations(data))
-      session.commit()
-
-    else:
-      session.query(
-        PhraseTranslations.Id).filter_by(Phrase=data['Phrase']).update(data)
-
-    session.add(Translations(data))
+    session.add(PhraseTranslations(data))
     session.commit()
 
   def QueryPhraseTranslations():
