@@ -69,17 +69,29 @@ class WordTranslations(Base):
 
 class Operations:
   def SaveTranslations(data):
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
     session.add(Translations(data))
     session.commit()
 
   def SavePhraseTranslations(data):
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
     session.add(PhraseTranslations(data))
     session.commit()
 
   def QueryPhraseTranslations():
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
     return [x.json() for x in session.query(PhraseTranslations).all()]
 
   def SaveWordTranslations(data):
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
     if session.query(WordTranslations.Id).filter_by(Word=data['Word']).scalar() == None:
       session.add(WordTranslations(data))
       session.commit()
@@ -92,9 +104,6 @@ class Operations:
     return [x.json() for x in session.query(WordTranslations).all()]
 
 Base.metadata.create_all(engine)
-Session = sessionmaker()
-Session.configure(bind=engine)
-session = Session()
 
 if __name__ == "__main__":
   Operations.SaveTranslations({"Phrase": "Fuck whore", "Translation": "reið hóru"})
